@@ -70,10 +70,16 @@ public class JoystickControl : MonoBehaviour
         playerAnim.SetBool("isIdleOn", false);
         playerAnim.SetBool("isRunningOn", true);
     }
-
     void StartIdleAnim()
     {
         playerAnim.SetBool("isIdleOn", true);
         playerAnim.SetBool("isRunningOn", false);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Collectable"))
+        {
+            other.GetComponent<CollectableCode>().SetCollected();
+        }
     }
 }
