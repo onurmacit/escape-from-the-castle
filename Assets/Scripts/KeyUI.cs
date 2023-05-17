@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class KeyUI : MonoBehaviour
 {
+    public Image redKey;
     public Image blueKey;
     public static KeyUI instance;
     public Transform iconTransform;

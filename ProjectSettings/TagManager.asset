@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Collectable
+  - BlueKey
+  - RedKey
+  - Cube
+  - RedCube
   layers:
   - Default
   - TransparentFX

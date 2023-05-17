@@ -10,7 +10,7 @@ public class CollectableCode : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-         keyUI = FindObjectOfType<KeyUI>();
+        keyUI = FindObjectOfType<KeyUI>();
 
     }
     // Update is called once per frame
@@ -25,11 +25,18 @@ public class CollectableCode : MonoBehaviour
             {
                 transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * 5f);
             }
-            
+
             else
-            {              
+            {
                 gameObject.SetActive(false);
-                keyUI.blueKey.gameObject.SetActive(true);
+                if (!keyUI.blueKey.gameObject.activeSelf)
+                {
+                    keyUI.blueKey.gameObject.SetActive(true);
+                }
+                else if (!keyUI.redKey.gameObject.activeSelf)
+                {
+                    keyUI.redKey.gameObject.SetActive(true);
+                }
             }
         }
     }
