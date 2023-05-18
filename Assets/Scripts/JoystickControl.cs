@@ -10,15 +10,14 @@ public class JoystickControl : MonoBehaviour
     public float speed;
     public float turnSpeed;
     Animator playerAnim;
-    private int level = 7;
+    private bool isMoving = false;
+    public int level = 15;
     public TextMeshProUGUI levelText;
     void Start()
     {
         playerAnim = GetComponent<Animator>();
 
-        levelText.text = "Lv." + level.ToString();
-
-        levelText.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
+        Level();
 
         Upgrade objectInteraction = FindObjectOfType<Upgrade>();
 
@@ -39,10 +38,8 @@ public class JoystickControl : MonoBehaviour
         {
             JoystickMovement();
         }
-
         levelText.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
     }
-    private bool isMoving = false;
 
     private void JoystickMovement()
     {
@@ -81,5 +78,10 @@ public class JoystickControl : MonoBehaviour
         {
             other.GetComponent<CollectableCode>().SetCollected();
         }
+    }
+    public void Level()
+    {
+        levelText.text = "Lv." + level.ToString();
+        levelText.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
     }
 }

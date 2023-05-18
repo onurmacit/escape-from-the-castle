@@ -9,6 +9,8 @@ TagManager:
   - RedKey
   - Cube
   - RedCube
+  - BlueCube
+  - Enemy
   layers:
   - Default
   - TransparentFX
