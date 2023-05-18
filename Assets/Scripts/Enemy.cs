@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
     public void Donme()
     {
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(enemy.DORotate(new Vector3(0, 90, 0), 1f));
+        sequence.Append(enemy.DORotate(new Vector3(0, 360, 0), 1f));
         sequence.AppendInterval(2f);
         sequence.Append(enemy.DORotate(new Vector3(0, 180, 0), 1f));
         sequence.AppendInterval(2f);
