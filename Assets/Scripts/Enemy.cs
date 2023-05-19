@@ -10,10 +10,9 @@ public class Enemy : MonoBehaviour
     public TextMeshProUGUI levelText;
     public int level = 12;
     public Transform enemy;
-
     public void Start()
     {
-        Donme();
+        Turn();
     }
 
     void FixedUpdate()
@@ -21,7 +20,7 @@ public class Enemy : MonoBehaviour
         levelText.text = "Lv." + level.ToString();
         levelText.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
     }
-    public void Donme()
+    public void Turn()
     {
         Sequence sequence = DOTween.Sequence();
         sequence.Append(enemy.DORotate(new Vector3(0, 360, 0), 1f));
@@ -30,7 +29,6 @@ public class Enemy : MonoBehaviour
         sequence.AppendInterval(2f);
         sequence.SetLoops(-1);
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

@@ -23,7 +23,6 @@ public class FieldOfViewEditor : Editor
         {
             Handles.color = Color.green;
             Handles.DrawLine(fov.transform.position, fov.playerRef.transform.position);
-
         }
 
     }

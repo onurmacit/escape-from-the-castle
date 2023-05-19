@@ -10,9 +10,9 @@ public class JoystickControl : MonoBehaviour
     public float speed;
     public float turnSpeed;
     Animator playerAnim;
-    private bool isMoving = false;
     public int level = 15;
     public TextMeshProUGUI levelText;
+   
     void Start()
     {
         playerAnim = GetComponent<Animator>();
@@ -36,7 +36,12 @@ public class JoystickControl : MonoBehaviour
     {
         if (Input.GetButton("Fire1"))
         {
+            StartRunAnim();
             JoystickMovement();
+        }
+        else
+        {
+            StartIdleAnim();
         }
         levelText.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
     }
@@ -50,17 +55,6 @@ public class JoystickControl : MonoBehaviour
 
         Vector3 direction = Vector3.forward * vertical + Vector3.right * horizontal;
         transform.rotation = Quaternion.Slerp(a: transform.rotation, b: Quaternion.LookRotation(direction), t: turnSpeed * Time.deltaTime);
-
-        if (addedPos.magnitude > 0)
-        {
-            StartRunAnim();
-            isMoving = true;
-        }
-        else if (isMoving)
-        {
-            StartIdleAnim();
-            isMoving = false;
-        }
     }
     void StartRunAnim()
     {
@@ -72,11 +66,33 @@ public class JoystickControl : MonoBehaviour
         playerAnim.SetBool("isIdleOn", true);
         playerAnim.SetBool("isRunningOn", false);
     }
+    void StartAttackAnim()
+    {
+        playerAnim.SetBool("isRunningOn", false);
+        playerAnim.SetBool("isAttackOn", true);
+    }
+
+    void StopAttackAnim()
+    {
+        playerAnim.SetBool("isAttackOn", false);
+        playerAnim.SetBool("isRunningOn", true);
+    }
     private void OnTriggerEnter(Collider other)
     {
+
         if (other.CompareTag("Collectable"))
         {
             other.GetComponent<CollectableCode>().SetCollected();
+        }
+
+        if (other.CompareTag("Cone"))
+        {
+            StartAttackAnim();               
+        }
+
+        if (other.CompareTag("Enemy"))
+        {
+            StopAttackAnim();
         }
     }
     public void Level()

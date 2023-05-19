@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class FieldOfView : MonoBehaviour
 {
+    Animator enemyAnim;
     public float radius;
     [Range(0,360)]
 
@@ -20,6 +22,7 @@ public class FieldOfView : MonoBehaviour
 
     private void Start()
     {
+        enemyAnim = GetComponent<Animator>();
         playerRef = GameObject.FindGameObjectWithTag("Player");
         StartCoroutine(FOVRoutine());
 
@@ -51,12 +54,12 @@ public class FieldOfView : MonoBehaviour
 
                 if (!Physics.Raycast(transform.position, directionTarget, distanceToTarget, obstructionMask))
                 {
+                    StartAttackAnim();
                     canSeePlayer = true;
                 }
                 else
                 {
                     canSeePlayer = false;
-
                 }
             }
             else
@@ -68,5 +71,11 @@ public class FieldOfView : MonoBehaviour
         {
             canSeePlayer = false;
         }
+    }
+
+    void StartAttackAnim()
+    {
+        enemyAnim.SetBool("isRunningOn", false);
+        enemyAnim.SetBool("isAttackOn", true);
     }
 }
