@@ -7,42 +7,36 @@ using TMPro;
 public class EnemyPatrol : MonoBehaviour
 {
     public GameObject playerText;
-    public Transform enemy;
     public int level = 15;
     public TextMeshProUGUI levelText;
     Animator playerAnim;
 
+    private Transform playerTransform;
+    private Transform enemyTransform;
+    private Sequence patrolSequence;
 
-    // Start is called before the first frame update
     void Start()
     {
         playerAnim = GetComponent<Animator>();
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        enemyTransform = transform;
+
         StartRunAnim();
-        Gitme();
+        StartCoroutine(PatrolRoutine());
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator PatrolRoutine()
     {
-        levelText.text = "Lv." + level.ToString();
-        levelText.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
-    }
-    public void Gitme()
-    {
-        enemy.DOMoveZ(0f, 5f).OnComplete(() =>
-    {   
-        enemy.DORotate(new Vector3(0f, -180f, 0f), 1f).OnComplete(() =>
+        while (true)
         {
-            enemy.DORotate(new Vector3(0f, -180f, 0f), 1f).SetDelay(1f).OnComplete(() =>
-            {    
-                enemy.DORotate(new Vector3(0f, -0.01f, 0f), 1f).SetDelay(3f);
-            });
-        });
-        enemy.DOMoveZ(-28.45f, 5f).SetDelay(1f).OnComplete(() =>
-        {    
-            Invoke("Gitme", 1f);
-        });
-    });
+            patrolSequence = DOTween.Sequence();
+            patrolSequence.Append(enemyTransform.DOMoveZ(0f, 5f));
+            patrolSequence.Append(enemyTransform.DORotate(new Vector3(0f, -180f, 0f), 1f));
+            patrolSequence.Append(enemyTransform.DORotate(new Vector3(0f, 0f, 0f), 1f));
+            patrolSequence.Append(enemyTransform.DOMoveZ(-28.45f, 5f));
+
+            yield return patrolSequence.WaitForCompletion();
+        }
     }
 
     void StartRunAnim()
@@ -50,17 +44,12 @@ public class EnemyPatrol : MonoBehaviour
         playerAnim.SetBool("isIdleOn", false);
         playerAnim.SetBool("isRunningOn", true);
     }
-    void StartIdleAnim()
-    {
-        playerAnim.SetBool("isIdleOn", true);
-        playerAnim.SetBool("isRunningOn", false);
-    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            JoystickControl playerScript = other.GetComponent<JoystickControl>();
+            Player playerScript = other.GetComponent<Player>();
             if (playerScript != null && level > playerScript.level)
             {
                 Destroy(other.gameObject);
@@ -72,5 +61,12 @@ public class EnemyPatrol : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        levelText.text = "Lv." + level.ToString();
+        levelText.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
     }
 }

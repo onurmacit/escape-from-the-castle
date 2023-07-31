@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            JoystickControl playerScript = other.GetComponent<JoystickControl>();
+            Player playerScript = other.GetComponent<Player>();
             if (playerScript != null && level > playerScript.level)
             {
                 Destroy(other.gameObject);

@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
 
-public class JoystickControl : MonoBehaviour
+public class Player : MonoBehaviour
 {
     public DynamicJoystick dynamicJoystick;
     public float speed;
@@ -12,11 +11,18 @@ public class JoystickControl : MonoBehaviour
     Animator playerAnim;
     public int level = 15;
     public TextMeshProUGUI levelText;
-   
-    void Start()
+    private Transform playerTransform;
+    private Camera mainCamera;
+
+    private void Awake()
     {
         playerAnim = GetComponent<Animator>();
+        playerTransform = transform;
+        mainCamera = Camera.main;
+    }
 
+    private void Start()
+    {
         Level();
 
         Upgrade objectInteraction = FindObjectOfType<Upgrade>();
@@ -25,61 +31,65 @@ public class JoystickControl : MonoBehaviour
         {
             objectInteraction.OnObjectInteracted += IncreaseLevelBy5;
         }
-
-        void IncreaseLevelBy5()
-        {
-            level += 5;
-            levelText.text = "Lv." + level.ToString();
-        }
     }
-    void FixedUpdate()
+
+    private void IncreaseLevelBy5()
+    {
+        level += 5;
+        levelText.text = "Lv." + level.ToString();
+    }
+
+    private void FixedUpdate()
     {
         if (Input.GetButton("Fire1"))
         {
             StartRunAnim();
-            JoystickMovement();
+            PlayerMovement();
         }
         else
         {
             StartIdleAnim();
         }
-        levelText.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
+        UpdateLevelTextPosition();
     }
 
-    private void JoystickMovement()
+    private void PlayerMovement()
     {
         float horizontal = dynamicJoystick.Horizontal;
         float vertical = dynamicJoystick.Vertical;
-        Vector3 addedPos = new Vector3(x: horizontal * speed * Time.deltaTime, y: 0, z: vertical * speed * Time.deltaTime);
-        transform.position += addedPos;
+        Vector3 addedPos = new Vector3(horizontal * speed * Time.fixedDeltaTime, 0, vertical * speed * Time.fixedDeltaTime);
+        playerTransform.position += addedPos;
 
         Vector3 direction = Vector3.forward * vertical + Vector3.right * horizontal;
-        transform.rotation = Quaternion.Slerp(a: transform.rotation, b: Quaternion.LookRotation(direction), t: turnSpeed * Time.deltaTime);
+        playerTransform.rotation = Quaternion.Slerp(playerTransform.rotation, Quaternion.LookRotation(direction), turnSpeed * Time.fixedDeltaTime);
     }
-    void StartRunAnim()
+
+    private void StartRunAnim()
     {
         playerAnim.SetBool("isIdleOn", false);
         playerAnim.SetBool("isRunningOn", true);
     }
-    void StartIdleAnim()
+
+    private void StartIdleAnim()
     {
         playerAnim.SetBool("isIdleOn", true);
         playerAnim.SetBool("isRunningOn", false);
     }
-    void StartAttackAnim()
+
+    private void StartAttackAnim()
     {
         playerAnim.SetBool("isRunningOn", false);
         playerAnim.SetBool("isAttackOn", true);
     }
 
-    void StopAttackAnim()
+    private void StopAttackAnim()
     {
         playerAnim.SetBool("isAttackOn", false);
         playerAnim.SetBool("isRunningOn", true);
     }
+
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.CompareTag("Collectable"))
         {
             other.GetComponent<CollectableCode>().SetCollected();
@@ -95,9 +105,15 @@ public class JoystickControl : MonoBehaviour
             StopAttackAnim();
         }
     }
+
+    private void UpdateLevelTextPosition()
+    {
+        levelText.rectTransform.position = mainCamera.WorldToScreenPoint(playerTransform.position);
+    }
+
     public void Level()
     {
         levelText.text = "Lv." + level.ToString();
-        levelText.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
+        UpdateLevelTextPosition();
     }
 }

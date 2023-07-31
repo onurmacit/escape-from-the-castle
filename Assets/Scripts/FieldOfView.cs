@@ -2,22 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 public class FieldOfView : MonoBehaviour
 {
-    Animator enemyAnim;
+    private Animator enemyAnim;
     public float radius;
-    [Range(0,360)]
-
+    [Range(0, 360)]
     public float angle;
-
     public GameObject playerRef;
-
     public LayerMask targetMask;
     public LayerMask obstructionMask;
-
-
     public bool canSeePlayer;
 
     private void Start()
@@ -25,7 +19,6 @@ public class FieldOfView : MonoBehaviour
         enemyAnim = GetComponent<Animator>();
         playerRef = GameObject.FindGameObjectWithTag("Player");
         StartCoroutine(FOVRoutine());
-
     }
 
     private IEnumerator FOVRoutine()
@@ -41,39 +34,27 @@ public class FieldOfView : MonoBehaviour
 
     private void FieldOfViewCheck()
     {
-        Collider[] rangeChecks = Physics.OverlapSphere(transform.position, radius, targetMask);
-
-        if (rangeChecks.Length != 0)
+        Vector3 directionToPlayer = playerRef.transform.position - transform.position;
+        float distanceToPlayer = directionToPlayer.magnitude;
+        if (distanceToPlayer <= radius)
         {
-            Transform target = rangeChecks[0].transform;
-            Vector3 directionTarget = (target.position - transform.position).normalized;
-
-            if (Vector3.Angle(transform.forward, directionTarget) < angle / 2)
+            float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+            if (angleToPlayer <= angle / 2f)
             {
-                float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
-                if (!Physics.Raycast(transform.position, directionTarget, distanceToTarget, obstructionMask))
+                if (!Physics.SphereCast(transform.position, 0.2f, directionToPlayer, out RaycastHit hit, distanceToPlayer, obstructionMask))
                 {
                     StartAttackAnim();
                     canSeePlayer = true;
-                }
-                else
-                {
-                    canSeePlayer = false;
+                    return;
                 }
             }
-            else
-            {
-                canSeePlayer = false;
-            }
         }
-        else if (canSeePlayer)
-        {
-            canSeePlayer = false;
-        }
+        
+        // Player not detected or obstructed
+        canSeePlayer = false;
     }
 
-    void StartAttackAnim()
+    private void StartAttackAnim()
     {
         enemyAnim.SetBool("isRunningOn", false);
         enemyAnim.SetBool("isAttackOn", true);
