@@ -29,15 +29,20 @@ public class EnemyPatrol : MonoBehaviour
     {
         while (true)
         {
-            patrolSequence = DOTween.Sequence();
+             patrolSequence = DOTween.Sequence();
             patrolSequence.Append(enemyTransform.DOMoveZ(0f, 5f));
             patrolSequence.Append(enemyTransform.DORotate(new Vector3(0f, -180f, 0f), 1f));
-            patrolSequence.Append(enemyTransform.DORotate(new Vector3(0f, 0f, 0f), 1f));
-            patrolSequence.Append(enemyTransform.DOMoveZ(-28.45f, 5f));
-
+            
+            patrolSequence.Append(enemyTransform.DOMoveZ(-28.45f, 5f).OnComplete(() => ResetRotation()));
+            patrolSequence.AppendInterval(1f); 
             yield return patrolSequence.WaitForCompletion();
         }
     }
+private void ResetRotation()
+    {
+        enemyTransform.DORotate(new Vector3(0f, 0f, 0f), 1f);
+    }
+    
 
     void StartRunAnim()
     {
