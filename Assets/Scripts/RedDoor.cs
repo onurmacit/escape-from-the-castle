@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RedDoor : MonoBehaviour
 {
@@ -32,6 +33,18 @@ public class RedDoor : MonoBehaviour
             redKeyColor.a = 0f;
             keyUI.redKey.color = redKeyColor;
         }
+
+         if (collision.gameObject.CompareTag("Player"))
+        {
+            EndGame(); 
+        }       
+    }
+
+     void EndGame()
+    {
+        
+        SceneManager.LoadScene("Scene2"); // Oyunun sonlandığı sahneye geçiş yap
+        
     }
     void Update()
     {

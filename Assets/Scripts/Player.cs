@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 
 public class Player : MonoBehaviour
+
 {
     public DynamicJoystick dynamicJoystick;
     public float speed;
