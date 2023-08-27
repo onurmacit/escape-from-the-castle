@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class uıTween : MonoBehaviour
+public class UITween : MonoBehaviour
 {
     [SerializeField]
     GameObject backPanel, homeButton, replayButton,
@@ -12,13 +12,13 @@ public class uıTween : MonoBehaviour
     void Start()
     {
         LeanTween.rotateAround(colorWheel, Vector3.forward, -360f, 10f).setLoopClamp();
-        LeanTween.scale(levelSucess, new Vector3(1.5f, 1.5f, 1.5f), 2f).setDelay(.5f).setEase(LeanTweenType.easeOutElastic).setOnComplete(LevelComplete);
+        LeanTween.scale(levelSucess, new Vector3(3f, 3f, 3f), 2f).setDelay(.5f).setEase(LeanTweenType.easeOutElastic).setOnComplete(LevelComplete);
         LeanTween.moveLocal(levelSucess, new Vector3(-30f, 747f, 2f), 0.7f).setDelay(2f).setEase(LeanTweenType.easeInOutCubic);
         LeanTween.scale(levelSucess, new Vector3(1f, 1f, 1f), 2f).setDelay(1.7f).setEase(LeanTweenType.easeInOutCubic);
 
     }
 
-    void LevelComplete()
+   public void LevelComplete()
     {
 
         LeanTween.moveLocal(backPanel, new Vector3(0f, -267f, 0f), 0.7f).setDelay(.5f).setEase(LeanTweenType.easeOutCirc).setOnComplete(StarsAnim);

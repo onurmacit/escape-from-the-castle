@@ -11,10 +11,14 @@ public class RedDoor : MonoBehaviour
     public float angle;
     public KeyUI keyUI;
 
+     UITween uıTweenScript; 
+
+
     void Start()
     {
         motor = hinge.motor;
 
+        uıTweenScript = FindObjectOfType<UITween>();
 
         hinge.useMotor = false;
         hinge.useLimits = false;
@@ -36,7 +40,7 @@ public class RedDoor : MonoBehaviour
 
          if (collision.gameObject.CompareTag("Player"))
         {
-            EndGame(); 
+            uıTweenScript.LevelComplete(); 
         }       
     }
 
