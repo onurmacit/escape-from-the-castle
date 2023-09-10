@@ -11,14 +11,17 @@ public class RedDoor : MonoBehaviour
     public float angle;
     public KeyUI keyUI;
 
-     UITween uıTweenScript; 
+    private GameObject canvas1; 
 
+    private GameObject canvas2; 
+
+    uitween uiTweenScript = new uitween();
 
     void Start()
     {
         motor = hinge.motor;
 
-        uıTweenScript = FindObjectOfType<UITween>();
+        uiTweenScript = FindObjectOfType<uitween>();
 
         hinge.useMotor = false;
         hinge.useLimits = false;
@@ -36,19 +39,7 @@ public class RedDoor : MonoBehaviour
             Color redKeyColor = keyUI.redKey.color;
             redKeyColor.a = 0f;
             keyUI.redKey.color = redKeyColor;
-        }
-
-         if (collision.gameObject.CompareTag("Player"))
-        {
-            uıTweenScript.LevelComplete(); 
-        }       
-    }
-
-     void EndGame()
-    {
-        
-        SceneManager.LoadScene("Scene2"); // Oyunun sonlandığı sahneye geçiş yap
-        
+        }     
     }
     void Update()
     {
@@ -64,7 +55,33 @@ public class RedDoor : MonoBehaviour
             hinge.useMotor = true;
             hinge.gameObject.GetComponent<Rigidbody>().isKinematic = false;
         }
-
         hinge.motor = motor;
     }
+
+    void CheckHingeAndActivateCanvas()
+{
+    // hinge değerleri true ise işlemleri yap
+    if (hinge != null && hinge.useMotor && hinge.useLimits)
+    {
+        // İlk olarak canvas öğelerini aktif hale getir
+        canvas1.gameObject.SetActive(true);
+        canvas2.gameObject.SetActive(true);
+
+        // LevelComplete scriptini çağır
+        LevelComplete levelCompleteScript = GetComponent<LevelComplete>();
+        if (levelCompleteScript != null)
+        {
+            levelCompleteScript.CompleteLevel(); // LevelComplete scriptinin uygun bir fonksiyonunu çağır
+        }
+        else
+        {
+            Debug.LogError("LevelComplete scripti bulunamadı.");
+        }
+    }
+    else
+    {
+        Debug.Log("Hinge değerleri kullanılamaz durumda.");
+    }
+}
+
 }
