@@ -7,7 +7,7 @@ public class uitween : MonoBehaviour
     [SerializeField]
     GameObject backPanel, homeButton, replayButton,
     star1, star2, star3, score, coins, gems, colorWheel, levelSuccess;
-    void LevelSuccess()
+    public void LevelSuccess()
     {
         LeanTween.rotateAround(colorWheel, Vector3.forward, -360, 10f).setLoopClamp();
         LeanTween.scale(levelSuccess, new Vector3(1.5f, 1.5f, 1.5f), 2f).setDelay(.5f).setEase(LeanTweenType.easeOutElastic).setOnComplete(LevelComplete);
