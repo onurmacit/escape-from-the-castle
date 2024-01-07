@@ -889,11 +889,11 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 0
-  cloudProjectId: 
+  cloudProjectId: c5a8b7ce-82bd-4f91-b037-d842b9ff34da
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: FunradoDemoProject
+  organizationId: onurmacit
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 

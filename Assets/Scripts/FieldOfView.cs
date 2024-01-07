@@ -49,6 +49,7 @@ public class FieldOfView : MonoBehaviour
                 }
             }
         }
+
         
         // Player not detected or obstructed
         canSeePlayer = false;

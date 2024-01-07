@@ -1,0 +1,4 @@
+repository "FunradoDemoProject@onurmacit@cloud"
+  path "/"
+    br "/main"
+    co "/main"
